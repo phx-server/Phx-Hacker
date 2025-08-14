@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Bonus</title>
+    <style>
+        /* Google Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* Basic Reset and Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            color: white;
+            overflow: hidden; /* To hide scrollbars */
+        }
+
+        /* Main Container for the Modals */
+        .container {
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+        }
+        
+        /* Common styles for all modals */
+        .modal {
+            background: #121212; /* Dark background */
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 85vh; /* Set a max height relative to the viewport height */
+            overflow-y: auto; /* Add a vertical scrollbar ONLY if content overflows */
+        }
+
+        /* Custom scrollbar for webkit browsers (Chrome, Safari) */
+        .modal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal::-webkit-scrollbar-track {
+            background: #121212; /* Match modal background */
+            border-radius: 10px;
+        }
+
+        .modal::-webkit-scrollbar-thumb {
+            background-color: #555; /* Scrollbar color */
+            border-radius: 10px;
+            border: 2px solid #121212; /* Padding around scroll thumb */
+        }
+
+
+        /* --- STYLES FOR MODAL 1: PROMOTION CLAIMED --- */
+
+        #modal-1 .coin-animation {
+            height: 80px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #modal-1 .slot {
+            width: 80px;
+            height: 30px;
+            background: #2ecc71; /* Green color */
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #modal-1 .coin {
+            width: 30px;
+            height: 30px;
+            background: #f1c40f; /* Yellow coin color */
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: drop 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
+
+        .coin:nth-child(1) { animation-delay: 0s; }
+        .coin:nth-child(2) { animation-delay: 0.2s; }
+        .coin:nth-child(3) { animation-delay: 0.4s; }
+        .coin:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes drop {
+            0% { top: -60px; opacity: 1; }
+            80% { top: 25px; }
+            100% { top: 25px; opacity: 1; }
+        }
+
+        #modal-1 h2 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        #modal-1 .amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        #modal-1 .claim-btn {
+            background: #f1c40f;
+            color: #121212;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #modal-1 .claim-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- STYLES FOR MODAL 2: JOIN CHANNELS --- */
+        #modal-2 {
+            display: none; /* Hidden by default */
+        }
+
+        #modal-2 h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        #modal-2 p {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            margin-bottom: 25px;
+        }
+
+        .channel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .channel-list a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f2f5;
+            color: #121212;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .channel-list a.joined {
+            background: #27ae60;
+            color: white;
+            pointer-events: none;
+        }
+        
+        .channel-list a.joined .join-icon {
+            display: none;
+        }
+
+        .channel-list a .join-icon,
+        .channel-list a .check-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .channel-list a .check-icon {
+            display: none;
+        }
+
+        .channel-list a.joined .check-icon {
+            display: flex;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #555;
+            color: #999;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: not-allowed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+        
+        .submit-btn:not(:disabled) {
+            background: #f1c40f;
+            color: #121212;
+            cursor: pointer;
+        }
+        
+        .submit-btn:not(:disabled):hover {
+            transform: scale(1.02);
+        }
+        
+        /* --- [NEWLY ADDED] STYLES FOR MODAL 3: WITHDRAWAL --- */
+        #modal-3 {
+            display: none; /* Hidden by default */
+        }
+
+        #modal-3 h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        #modal-3 .balance {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 25px;
+        }
+        
+        #modal-3 .balance strong {
+            color: #f1c40f;
+            font-size: 1.3rem;
+        }
+
+        #withdraw-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #withdraw-form .form-group {
+            text-align: left;
+        }
+
+        #withdraw-form label.group-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ddd;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .payment-options input[type="radio"] {
+            display: none; /* Hide the actual radio button */
+        }
+
+        .payment-options .option {
+            flex-grow: 1;
+            padding: 10px;
+            border: 2px solid #444;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            background: #222;
+        }
+
+        .payment-options .option img {
+            height: 30px;
+            width: auto;
+        }
+
+        .payment-options input[type="radio"]:checked + .option {
+            border-color: #f1c40f;
+            background-color: #333;
+            transform: translateY(-5px);
+        }
+
+        #withdraw-form #upi-id-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background: #222;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.2s;
+        }
+        
+        #withdraw-form #upi-id-input:focus {
+            outline: none;
+            border-color: #f1c40f;
+        }
+
+        #withdraw-btn {
+            width: 100%;
+            background: #f1c40f;
+            color: #121212;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #withdraw-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* --- [NEWLY ADDED] STYLES FOR SUCCESS MESSAGE --- */
+        #success-message {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 40px 0;
+        }
+
+        #success-message svg {
+            width: 80px;
+            height: 80px;
+            color: #f1c40f;
+        }
+        
+        #success-message h2 {
+            font-size: 1.5rem;
+        }
+        
+        #success-message p {
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- MODAL 1: Initial Promotion Claim -->
+    <div class="modal" id="modal-1">
+        <div class="coin-animation">
+            <div class="coin"></div>
+            <div class="coin"></div>
+            <div class="coin"></div>
+            <div class="coin"></div>
+            <div class="slot"></div>
+        </div>
+        <h2>Successfully claimed the promotion code.</h2>
+        <div class="amount">100.00 INR</div>
+        <button class="claim-btn" id="claim-btn">Claim</button>
+    </div>
+
+    <!-- MODAL 2: Join Channels Task -->
+    <div class="modal" id="modal-2">
+        <h1>CLAIM YOUR ₹100 BONUS</h1>
+        <p>MUST JOIN ALL CHANNELS</p>
+
+        <div class="channel-list" id="channel-list">
+            <!-- Links will be generated by JavaScript -->
+        </div>
+        
+        <button class="submit-btn" id="submit-btn" disabled>
+            Submit
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- [NEWLY ADDED] MODAL 3: WITHDRAWAL SYSTEM -->
+    <div class="modal" id="modal-3">
+        <div id="withdraw-form-container">
+            <h1>Withdrawal</h1>
+            <p class="balance">Available Balance: <strong>₹100.00</strong></p>
+
+            <form id="withdraw-form">
+                <div class="form-group">
+                    <label class="group-title">Select Payment Method</label>
+                    <div class="payment-options">
+                        <label>
+                            <input type="radio" name="payment-method" value="paytm" checked>
+                            <div class="option">
+                                <img src="https://assetscdn1.paytm.com/images/catalog/category/5165/paytm_logo.png" alt="Paytm">
+                            </div>
+                        </label>
+                        <label>
+                            <input type="radio" name="payment-method" value="phonepe">
+                            <div class="option">
+                                <img src="https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png" alt="PhonePe">
+                            </div>
+                        </label>
+                        <label>
+                            <input type="radio" name="payment-method" value="gpay">
+                            <div class="option">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/2560px-Google_Pay_Logo.svg.png" alt="Google Pay">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="upi-id-input" class="group-title">Enter UPI ID</label>
+                    <input type="text" id="upi-id-input" placeholder="yourname@upi" required>
+                </div>
+
+                <button type="submit" id="withdraw-btn">Withdraw ₹100</button>
+            </form>
+        </div>
+
+        <div id="success-message">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.352l-1.558.935a.5.5 0 0 0 .518.868l1.8-1.082A.5.5 0 0 0 8.5 9.148V5.5z"/>
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+            </svg>
+            <h2>Withdrawal Submitted</h2>
+            <p>Wait 24 Hour's Payment Mil jayega</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Get all the elements we need to interact with
+    const claimBtn = document.getElementById('claim-btn');
+    const modal1 = document.getElementById('modal-1');
+    const modal2 = document.getElementById('modal-2');
+    const channelList = document.getElementById('channel-list');
+    const submitBtn = document.getElementById('submit-btn');
+    
+    // --- [NEWLY ADDED] Get elements for Modal 3 ---
+    const modal3 = document.getElementById('modal-3');
+    const withdrawForm = document.getElementById('withdraw-form');
+    const withdrawFormContainer = document.getElementById('withdraw-form-container');
+    const successMessage = document.getElementById('success-message');
+
+    // --- STEP 1: APNE SAARE CHANNEL LINKS YAHAN DAALEIN ---
+    const channelLinks = [
+        'https://t.me/+AemE8sDC9080NDA1',
+        'https://t.me/examplechannel2', // Dusra link
+        'https://t.me/examplechannel3', // Teesra link
+        'https://t.me/examplechannel4',
+        'https://t.me/examplechannel5',
+        'https://t.me/examplechannel6',
+        'https://t.me/examplechannel7',
+        'https://t.me/examplechannel8',
+        'https://t.me/examplechannel9'
+    ];
+    
+    const totalChannels = channelLinks.length;
+    let joinedChannels = 0;
+
+    // --- Step 2: Generate the channel list with links ---
+    channelLinks.forEach((link, index) => {
+        const linkElement = document.createElement('a');
+        linkElement.href = link;
+        linkElement.target = '_blank'; // Link ko naye tab mein kholne ke liye
+        linkElement.innerHTML = `
+            <span>Join ${index + 1}</span>
+            <span class="join-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                </svg>
+            </span>
+            <span class="check-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M12.736 4.264a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708L7.707 12.707a.5.5 0 0 1-.708 0l-4-4a.5.5 0 1 1 .708-.708L7 11.293l5.736-5.736a.5.5 0 0 1 .708 0z"/>
+                </svg>
+            </span>
+        `;
+        
+        // --- Step 3: Har link par click event lagana ---
+        linkElement.addEventListener('click', (event) => {
+            if (!linkElement.classList.contains('joined')) {
+                linkElement.classList.add('joined');
+                joinedChannels++;
+                checkIfAllJoined();
+            }
+        });
+
+        channelList.appendChild(linkElement);
+    });
+
+    // --- Step 4: Check karna ki saare channels join ho gaye ya nahi ---
+    function checkIfAllJoined() {
+        if (joinedChannels === totalChannels) {
+            submitBtn.disabled = false;
+        }
+    }
+    
+    // --- Step 5: "Claim" button ka click handle karna ---
+    claimBtn.addEventListener('click', () => {
+        modal1.style.display = 'none';
+        modal2.style.display = 'block';
+    });
+
+    // --- [NEWLY ADDED] Step 6: "Submit" button ka click handle karna ---
+    submitBtn.addEventListener('click', () => {
+        // Yeh button sirf tabhi click hoga jab disabled nahi hai
+        if (!submitBtn.disabled) {
+            modal2.style.display = 'none';
+            modal3.style.display = 'block';
+        }
+    });
+    
+    // --- [NEWLY ADDED] Step 7: "Withdraw" form ka submit handle karna ---
+    withdrawForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Page ko reload hone se roko
+
+        const upiInput = document.getElementById('upi-id-input');
+
+        // Simple validation: check karo ki UPI ID khali na ho
+        if (upiInput.value.trim() === '') {
+            alert('Please enter a valid UPI ID.');
+            return; // Function ko yahin rok do
+        }
+
+        // Form ko hide karo aur success message dikhao
+        withdrawFormContainer.style.display = 'none';
+        successMessage.style.display = 'flex'; // Use flex to center the content
+    });
+
+</script>
+</body>
+</html>
